@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   validationSchema,
   validationOptions,
@@ -8,9 +8,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+// import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
+    // https://docs.nestjs.com/techniques/configuration
     ConfigModule.forRoot({
       // ignoreEnvFile: true // disable env
       envFilePath: '.env',
@@ -18,15 +20,26 @@ import { AuthModule } from './auth/auth.module';
       validationSchema,
       validationOptions,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [],
-      // synchronize: false, // production 환경에서 true로 사용하지 말것. 데이터를 잃어버림
+    // https://docs.nestjs.com/techniques/database#async-configuration
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        autoLoadEntities: true,
+        synchronize: false,
+        logging: true,
+      }),
+      // custom datasource에 대해 더 알아볼 것.
+      // dataSourceFactory: async (option) => {
+      //   const dataSource = await new DataSource(option).initialize();
+      //   return dataSource;
+      // },
     }),
     AuthModule,
   ],
