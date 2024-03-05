@@ -13,9 +13,7 @@ export const validationSchema = Joi.object({
   DB_DATABASE: Joi.string().required(),
 });
 
-/**
- * https://joi.dev/api/?v=17.12.2#anyvalidatevalue-options
- */
+// https://joi.dev/api/?v=17.12.2#anyvalidatevalue-options
 export const validationOptions = {
   allowUnkown: true,
   abortEarly: false,
