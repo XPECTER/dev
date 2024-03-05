@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 
 export const validationSchema = Joi.object({
   // env
+  EXE_ENV: Joi.string().valid('dev', 'prod').required(),
   PORT: Joi.number().required(),
 
   // database
