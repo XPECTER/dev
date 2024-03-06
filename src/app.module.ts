@@ -32,8 +32,8 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
-        synchronize: false,
-        logging: true,
+        synchronize: configService.get<string>('EXE_ENV') !== 'prod',
+        logging: configService.get<string>('EXE_ENV') !== 'prod',
       }),
       // custom datasource에 대해 더 알아볼 것.
       // dataSourceFactory: async (option) => {
