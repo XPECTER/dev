@@ -5,7 +5,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { randomUUID } from 'crypto';
+import { getUUID } from '../util/generate-uuid';
 
 @Entity()
 export abstract class BaseEntity {
@@ -22,8 +22,6 @@ export abstract class BaseEntity {
   deletedAt: Date;
 
   constructor() {
-    const uuid = randomUUID().split('-');
-    [uuid[0], uuid[2]] = [uuid[2], uuid[0]];
-    this.id = uuid.join('');
+    this.id = getUUID();
   }
 }
