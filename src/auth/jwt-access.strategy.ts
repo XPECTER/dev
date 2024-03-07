@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { TokenPayload } from './types';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
@@ -17,7 +18,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   }
 
   // Passport는 사용자를 Request.user에 저장한다
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+  async validate(payload: TokenPayload) {
+    return { ...payload };
   }
 }

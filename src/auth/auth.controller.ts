@@ -5,15 +5,17 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
+import { TokenPayload } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +37,7 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
+      sameSite: true,
     });
 
     // res 객체를 따로 사용하면 return만으로는 응답이 가지 않는다.
@@ -43,8 +46,17 @@ export class AuthController {
 
   @UseGuards(AuthGuard('refresh'))
   @Post('refresh')
-  refresh() {
-    return `Success`;
+  refresh(@Req() req: Request, @Res() res: Response) {
+    const { accessToken, refreshToken } = this.authService.refreshAccessToken(
+      req.user as TokenPayload,
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: true,
+    });
+
+    return res.json({ accessToken });
   }
 
   // acesstokrn guard 확인용

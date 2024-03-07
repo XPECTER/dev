@@ -3,6 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { getUUID } from 'src/common/util/generate-uuid';
+import * as dayjs from 'dayjs';
+import { TokenPayload } from './types';
 
 @Injectable()
 export class AuthService {
@@ -12,16 +15,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(dto: LoginDto) {
+  public async login(dto: LoginDto) {
     const user = await this.userService.verifyUser(dto.email, dto.password);
-    const payload = { name: user.name, sub: user.id };
+    const payload = this.createTokenPayload(user.id);
     const accessToken = this.createAccessToken(payload);
     const refreshToken = this.createRefreshToken(payload);
 
     return { accessToken, refreshToken };
   }
 
-  createAccessToken(payload) {
+  public refreshAccessToken(payload: TokenPayload) {
+    const newPayload = this.createTokenPayload(payload.sub);
+    const accessToken = this.createAccessToken(newPayload);
+    const refreshToken = this.createRefreshToken(newPayload);
+
+    return { accessToken, refreshToken };
+  }
+
+  private createTokenPayload(userId: string): TokenPayload {
+    return {
+      sub: userId,
+      iat: dayjs().unix(),
+      jti: getUUID(),
+    };
+  }
+  private createAccessToken(payload: TokenPayload) {
     const secret = this.configService.get<string>('JWT_ACCESS_SECRET');
     const expiresIn = this.configService.get<string>('JWT_ACCESS_EXPIRY');
 
@@ -33,7 +51,7 @@ export class AuthService {
     return token;
   }
 
-  createRefreshToken(payload) {
+  private createRefreshToken(payload: TokenPayload) {
     const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
     const expiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRY');
 
