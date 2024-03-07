@@ -3,7 +3,6 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryColumn,
-  // PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { randomUUID } from 'crypto';
