@@ -1,26 +1,47 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserRepository } from './user.repository';
-import { User } from './entities/user.entity';
-import * as argon from 'argon2';
+import { UserService } from './user.service';
+import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private configService: ConfigService,
-    private userRepository: UserRepository,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async createUser(dto: CreateUserDto): Promise<User> {
-    const user = await this.userRepository.findOneByEmail(dto.email);
-    if (user) {
-      throw new BadRequestException(`'${dto.email}' email already exist`);
-    }
+  async login(dto: LoginDto) {
+    const user = await this.userService.verifyUser(dto.email, dto.password);
+    const payload = { name: user.name, sub: user.id };
+    const accessToken = this.createAccessToken(payload);
+    const refreshToken = this.createRefreshToken(payload);
 
-    // argon, scrypt, bcrypt에 대한 내용은 아래 글을 읽어보세요.
-    // https://myas92.medium.com/what-is-the-best-algorithm-bcrypt-scrypt-sha512-argon2-for-password-hashing-in-node-js-2-918b3e49e0b3
-    const hashedPassword = await argon.hash(dto.password);
-    return this.userRepository.createUser(dto, hashedPassword);
+    return { accessToken, refreshToken };
+  }
+
+  createAccessToken(payload) {
+    const secret = this.configService.get<string>('JWT_ACCESS_SECRET');
+    const expiresIn = this.configService.get<string>('JWT_ACCESS_EXPIRY');
+
+    const token = this.jwtService.sign(payload, {
+      secret,
+      expiresIn,
+    });
+
+    return token;
+  }
+
+  createRefreshToken(payload) {
+    const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
+    const expiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRY');
+
+    const token = this.jwtService.sign(payload, {
+      secret,
+      expiresIn,
+    });
+
+    return token;
   }
 }
