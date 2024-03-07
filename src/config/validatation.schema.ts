@@ -5,6 +5,16 @@ export const validationSchema = Joi.object({
   EXE_ENV: Joi.string().valid('dev', 'prod').required(),
   PORT: Joi.number().required(),
 
+  // JWT
+  JWT_ACCESS_SECRET: Joi.string().required(),
+  JWT_ACCESS_EXPIRY: Joi.string()
+    .regex(/^[1-9]\d{0,1}[dhms]$/)
+    .required(),
+  JWT_REFRESH_SECRET: Joi.string().required(),
+  JWT_REFRESH_EXPIRY: Joi.string()
+    .regex(/^[1-9]\d{0,1}[dhms]$/)
+    .required(),
+
   // database
   DB_HOST: Joi.string().required(),
   DB_PORT: Joi.number().required(),
