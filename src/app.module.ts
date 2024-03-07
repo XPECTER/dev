@@ -35,11 +35,6 @@ import { AuthModule } from './auth/auth.module';
         synchronize: configService.get<string>('EXE_ENV') !== 'prod',
         logging: configService.get<string>('EXE_ENV') !== 'prod',
       }),
-      // custom datasource에 대해 더 알아볼 것.
-      // dataSourceFactory: async (option) => {
-      //   const dataSource = await new DataSource(option).initialize();
-      //   return dataSource;
-      // },
     }),
     AuthModule,
   ],
