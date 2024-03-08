@@ -1,7 +1,7 @@
 name: Build and Push to AWS ECR
 
 on:
-  push:
+  pull_request:
     branches: ['main']
 
 env:
