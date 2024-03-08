@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { getUUID } from 'src/common/util/generate-uuid';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { TokenPayload } from './types';
 
 @Injectable()
