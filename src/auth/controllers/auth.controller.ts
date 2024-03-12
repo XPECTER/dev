@@ -9,13 +9,13 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
+import { AuthService } from '../services/auth.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { LoginDto } from '../dto/login.dto';
 import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { UserService } from './user.service';
-import { TokenPayload } from './types';
+import { UserService } from '../services/user.service';
+import { TokenPayload } from '../types';
 
 @Controller('auth')
 export class AuthController {

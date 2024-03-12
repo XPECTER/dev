@@ -8,7 +8,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-// import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -31,7 +30,7 @@ import { AuthModule } from './auth/auth.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        autoLoadEntities: true,
+        entities: ['dist/**/*.entity.js'],
         synchronize: configService.get<string>('EXE_ENV') !== 'prod',
         logging: configService.get<string>('EXE_ENV') !== 'prod',
       }),
