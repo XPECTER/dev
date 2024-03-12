@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { IssuedCoupon } from 'src/payment/entities/issued-coupon.entity';
+import { IssuedCoupon } from 'src/coupon/entities/issued-coupon.entity';
 
 @Entity()
 export class User extends BaseEntity {
