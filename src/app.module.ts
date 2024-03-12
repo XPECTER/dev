@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { CouponModule } from './coupon/coupon.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     AuthModule,
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [AppService],
