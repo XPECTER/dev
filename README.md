@@ -32,7 +32,7 @@ yarn run start:dev
 
 ## 앞으로 추가할 목록
 
-1. E2E test라도 추가해서 실패하면 ECR에 이지미 push 못하게 설정하기
+1. E2E test라도 추가해서 실패하면 ECR에 이미지 push 못하게 설정하기
 
 2. 포인트 모듈 구현
 
