@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { PaymentModule } from './payment/payment.module';
 import { CouponModule } from './coupon/coupon.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
@@ -46,6 +47,7 @@ import { DataSource } from 'typeorm';
       },
     }),
     AuthModule,
+    PaymentModule,
     CouponModule,
   ],
   controllers: [AppController],
