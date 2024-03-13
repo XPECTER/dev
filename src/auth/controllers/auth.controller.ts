@@ -62,7 +62,7 @@ export class AuthController {
   // acesstokrn guard 확인용
   @UseGuards(AuthGuard('access'))
   @Get('profile')
-  getProfile() {
-    return `Success`;
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 }

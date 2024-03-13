@@ -20,10 +20,6 @@ export class AuthService {
     const payload = this.createTokenPayload(user.id);
     const accessToken = this.createAccessToken(payload);
     const refreshToken = this.createRefreshToken(payload);
-    console.log(
-      this.calculateDate(this.configService.get<string>('JWT_ACCESS_EXPIRY')),
-    );
-    console.log(dayjs().unix());
 
     return { accessToken, refreshToken };
   }

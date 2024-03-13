@@ -7,11 +7,17 @@ import { UserRepository } from '../repositories/user.repository';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../entities/user.entity';
 import * as argon from 'argon2';
+import { Transactional } from 'typeorm-transactional';
+import { PointRepository } from 'src/payment/repositories/point.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepo: UserRepository) {}
+  constructor(
+    private readonly userRepo: UserRepository,
+    private readonly pointRepo: PointRepository,
+  ) {}
 
+  @Transactional()
   async createUser(dto: CreateUserDto): Promise<Partial<User>> {
     const user = await this.userRepo.findOneByEmail(dto.email);
     if (user) {
@@ -22,6 +28,8 @@ export class UserService {
     // https://myas92.medium.com/what-is-the-best-algorithm-bcrypt-scrypt-sha512-argon2-for-password-hashing-in-node-js-2-918b3e49e0b3
     const hashedPassword = await argon.hash(dto.password);
     const newUser = await this.userRepo.createUser(dto, hashedPassword);
+    await this.pointRepo.init(newUser);
+
     return { email: newUser.email };
   }
 
