@@ -28,7 +28,6 @@ export class UserService {
     // https://myas92.medium.com/what-is-the-best-algorithm-bcrypt-scrypt-sha512-argon2-for-password-hashing-in-node-js-2-918b3e49e0b3
     const hashedPassword = await argon.hash(dto.password);
     const newUser = await this.userRepo.createUser(dto, hashedPassword);
-    await this.pointRepo.init(newUser);
 
     return { email: newUser.email };
   }

@@ -46,7 +46,6 @@ export class PaymentService {
   }
 
   async getPaymentInformation(userId: string) {
-    // 포인트 정보
     const point = await this.pointRepo.findOne({
       select: ['id', 'amount'],
       where: { user: { id: userId } },
