@@ -9,6 +9,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CouponModule } from './coupon/coupon.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -35,6 +37,13 @@ import { CouponModule } from './coupon/coupon.module';
         synchronize: configService.get<string>('EXE_ENV') !== 'prod',
         logging: configService.get<string>('EXE_ENV') !== 'prod',
       }),
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
     AuthModule,
     CouponModule,
