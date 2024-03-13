@@ -1,13 +1,11 @@
 import {
   CreateDateColumn,
   DeleteDateColumn,
-  Entity,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { getUUID } from '../util/generate-uuid';
 
-@Entity()
 export abstract class BaseEntity {
   @PrimaryColumn()
   id: string;
