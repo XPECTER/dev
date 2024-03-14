@@ -16,8 +16,10 @@ export class PointRepository extends Repository<Point> {
   }
 
   async addPoint(userId: string, pointAmount: number) {
-    const user = await this.userRepo.findOne({ where: { id: userId } });
-    let point = await this.repo.findOne({ where: { user: { id: userId } } });
+    const user: User = await this.userRepo.findOne({ where: { id: userId } });
+    let point: Point = await this.repo.findOne({
+      where: { user: { id: userId } },
+    });
 
     if (!point) {
       point = new Point();
