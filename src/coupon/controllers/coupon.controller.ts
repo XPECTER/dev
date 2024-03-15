@@ -1,4 +1,4 @@
-import { Body, Controller, ParseArrayPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, ParseArrayPipe, Post } from '@nestjs/common';
 import { CouponService } from '../services/coupon.service';
 import { CreateCouponDto } from '../dtos/create-coupon.dto';
 
@@ -12,5 +12,10 @@ export class CouponController {
     createCouponDtos: CreateCouponDto[],
   ) {
     return this.couponService.createCoupon(createCouponDtos);
+  }
+
+  @Get()
+  getAllCoupons() {
+    return this.couponService.getCoupon();
   }
 }

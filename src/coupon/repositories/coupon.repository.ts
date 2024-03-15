@@ -26,4 +26,8 @@ export class CouponRepository extends Repository<Coupon> {
 
     return this.repo.insert(items);
   }
+
+  async findAllCoupon() {
+    return this.repo.find({ select: ['id', 'name', 'type', 'value'] });
+  }
 }
