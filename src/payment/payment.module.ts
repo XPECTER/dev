@@ -9,6 +9,7 @@ import { IssuedCoupon } from 'src/coupon/entities/issued-coupon.entity';
 import { JwtAccessStrategy } from 'src/auth/strategies/jwt-access.strategy';
 import { PointRepository } from './repositories/point.repository';
 import { IssuedCouponRepository } from 'src/coupon/repositories/issued-coupon.repository';
+import { OrderService } from './services/order.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { IssuedCouponRepository } from 'src/coupon/repositories/issued-coupon.re
   controllers: [PaymentController],
   providers: [
     PaymentService,
+    OrderService,
     JwtAccessStrategy,
     PointRepository,
     IssuedCouponRepository,

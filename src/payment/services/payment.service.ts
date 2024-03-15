@@ -24,6 +24,7 @@ export class PaymentService {
     };
   }
 
+  // 이건 repository로
   async requestPayment() {
     const url = 'https://api.tosspayments.com/v1/payments/confirm';
     const headers = this.createHeaders();
@@ -42,7 +43,6 @@ export class PaymentService {
     );
     console.log(data);
     return data;
-    return;
   }
 
   async getPaymentInformation(userId: string) {
